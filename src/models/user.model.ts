@@ -1,11 +1,12 @@
 import mongoose from "mongoose";
 interface IUser{
     _id?:mongoose.Types.ObjectId
-    name:String
-    email:String
-    password?:String
-    mobile:String
+    name:string
+    email:string
+    password?:string
+    mobile:string
     role: "user" | "deliveryBoy" | "admin"
+    image?:string
 
 }
 
@@ -31,7 +32,9 @@ const userSchema = new mongoose.Schema<IUser>({
     type:String,
     enum:["user", "deliveryBoy", "admin"],
     default: "user"
-
+ },
+ image:{
+   type:String
  }
 },{timestamps:true})
 

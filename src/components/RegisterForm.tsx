@@ -7,6 +7,7 @@ import Image from "next/image";
 import googleImage from "@/assets/google.png"
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import { signIn, useSession } from "next-auth/react";
 
 type propType = {
   previousStep: (s: number) => void;
@@ -27,6 +28,9 @@ const RegisterForm = ({ previousStep }: propType) => {
   };
 
   const router = useRouter()
+
+   const session = useSession();
+    console.log(session);
 
   const handleRegister = async (e:React.FormEvent) => {
     e.preventDefault()
@@ -214,7 +218,7 @@ const RegisterForm = ({ previousStep }: propType) => {
             OR
             <span className="flex-1 h-px bg-gray-200"></span>
         </div>
-        <button className="w-full flex items-center justify-center gap-3 border border-gray-300 hover:bg-gray-100 py-3 rounded-xl text-gray-700 font-medium transition-all duration-200 cursor-pointer">
+        <button className="w-full flex items-center justify-center gap-3 border border-gray-300 hover:bg-gray-100 py-3 rounded-xl text-gray-700 font-medium transition-all duration-200 cursor-pointer" onClick={() => signIn("google")}>
             <Image src={googleImage} width={20} height={20} alt="google"/>
             Continue with Google
         </button>
