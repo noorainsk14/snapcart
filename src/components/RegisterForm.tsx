@@ -1,13 +1,23 @@
-"use client"
+"use client";
 
-import { ArrowLeft, Eye, EyeOff, Leaf, Loader2, Lock, LogIn, Mail, User } from "lucide-react";
+import {
+  ArrowLeft,
+  Eye,
+  EyeOff,
+  Leaf,
+  Loader2,
+  Lock,
+  LogIn,
+  Mail,
+  User,
+} from "lucide-react";
 import { motion } from "motion/react";
 import React, { useState } from "react";
 import Image from "next/image";
-import googleImage from "@/assets/google.png"
+import googleImage from "@/assets/google.png";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import { signIn, useSession } from "next-auth/react";
+import { signIn } from "next-auth/react";
 
 type propType = {
   previousStep: (s: number) => void;
@@ -27,31 +37,31 @@ const RegisterForm = ({ previousStep }: propType) => {
     return /^[A-Za-z ]{2,}$/.test(name.trim());
   };
 
-  const router = useRouter()
+  const router = useRouter();
 
-   const session = useSession();
-    console.log(session);
 
-  const handleRegister = async (e:React.FormEvent) => {
-    e.preventDefault()
-    setLoading(true)
+  const handleRegister = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
     try {
-        
-        const result = await axios.post("/api/auth/register",{name, email, password})
-        // console.log(result.data);
-        setName("")
-        setEmail("")
-        setPassword("")
-        setLoading(false)
-        
+       await axios.post("/api/auth/register", {
+        name,
+        email,
+        password,
+      });
+      setName("");
+      setEmail("");
+      setPassword("");
+      setLoading(false);
+      router.push("/login")
     } catch (error) {
-        console.error(error)
-        setName("")
-        setEmail("")
-        setPassword("")
-        setLoading(false)
+      console.error(error);
+      setName("");
+      setEmail("");
+      setPassword("");
+      setLoading(false);
     }
-  }
+  };
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen px-6 py-10 bg-white relative">
@@ -84,7 +94,7 @@ const RegisterForm = ({ previousStep }: propType) => {
       </p>
 
       <motion.form
-      onSubmit={handleRegister}
+        onSubmit={handleRegister}
         initial={{
           opacity: 0,
         }}
@@ -200,30 +210,42 @@ const RegisterForm = ({ previousStep }: propType) => {
             password.length >= 6;
           return (
             <button
-            disabled={!formValidation}
+              disabled={!formValidation}
               className={`w-full font-semibold py-3 rounded-xl transition-all duration-200 shadow-md inline-flex items-center justify-center gap-2 ${
                 formValidation
                   ? "bg-green-600 hover:bg-green-700 text-white"
                   : "bg-gray-300 text-gray-500 cursor-not-allowed"
               }`}
             >
-                {loading ? <Loader2 className="w-5 h-5 animate-spin"/> : "Register"}
-              
+              {loading ? (
+                <Loader2 className="w-5 h-5 animate-spin" />
+              ) : (
+                "Register"
+              )}
             </button>
           );
         })()}
 
         <div className="flex items-center gap-2 text-gray-400 text-sm mt2">
-            <span className="flex-1 h-px bg-gray-200"></span>
-            OR
-            <span className="flex-1 h-px bg-gray-200"></span>
+          <span className="flex-1 h-px bg-gray-200"></span>
+          OR
+          <span className="flex-1 h-px bg-gray-200"></span>
         </div>
-        <button className="w-full flex items-center justify-center gap-3 border border-gray-300 hover:bg-gray-100 py-3 rounded-xl text-gray-700 font-medium transition-all duration-200 cursor-pointer" onClick={() => signIn("google")}>
-            <Image src={googleImage} width={20} height={20} alt="google"/>
-            Continue with Google
-        </button>
+        <div
+          className="w-full flex items-center justify-center gap-3 border border-gray-300 hover:bg-gray-100 py-3 rounded-xl text-gray-700 font-medium transition-all duration-200 cursor-pointer"
+          onClick={() => signIn("google", { callbackUrl: "/" })}
+        >
+          <Image src={googleImage} width={20} height={20} alt="google" />
+          Continue with Google
+        </div>
       </motion.form>
-      <p onClick={() => router.push("/login")} className="text-gray-600 mt-6 text-sm flex items-center gap-1 cursor-pointer">Already have an account ?  <LogIn className="w-4 h-4"/> <span className="text-green-600 "> Sign in</span></p>
+      <p
+        onClick={() => router.push("/login")}
+        className="text-gray-600 mt-6 text-sm flex items-center gap-1 cursor-pointer"
+      >
+        Already have an account ? <LogIn className="w-4 h-4" />{" "}
+        <span className="text-green-600 "> Sign in</span>
+      </p>
     </div>
   );
 };
