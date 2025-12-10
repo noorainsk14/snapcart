@@ -5,7 +5,7 @@ import { motion } from "motion/react";
 import React, { useState } from "react";
 import Image from "next/image";
 import googleImage from "@/assets/google.png";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
 
 const LogInForm = () => {
@@ -24,7 +24,7 @@ const LogInForm = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      await signIn("credentials", { email, password });
+      await signIn("credentials", { email, password,  redirect: false },  );
       setLoading(false);
       router.push("/")
     } catch (error) {
@@ -52,9 +52,19 @@ const LogInForm = () => {
       >
         Welcome Back
       </motion.h1>
-      <p className="text-gray-600 mb-8 flex items-center">
+      <motion.p
+      initial={{
+        opacity:0
+      }}
+      animate={{
+        opacity:1
+      }}
+      transition={{
+        duration:0.6
+      }}
+      className="text-gray-600 mb-8 flex items-center">
         Login to Snapcart <Leaf className="w-5 h-5 text-green-600" />
-      </p>
+      </motion.p>
 
       <motion.form
         onSubmit={handleLogin}
@@ -169,13 +179,22 @@ const LogInForm = () => {
           Continue with Google
         </div>
       </motion.form>
-      <p
+      <motion.p
+      initial={{
+        opacity:0
+      }}
+      animate={{
+        opacity:1
+      }}
+      transition={{
+        duration:0.6
+      }}
         onClick={() => router.push("/register")}
         className="text-gray-600 mt-6 text-sm flex items-center gap-1 cursor-pointer"
       >
         Want to create an account ? <LogIn className="w-4 h-4" />{" "}
         <span className="text-green-600 "> Sign Up</span>
-      </p>
+      </motion.p>
     </div>
   );
 };
