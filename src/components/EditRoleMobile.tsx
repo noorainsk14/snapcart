@@ -4,7 +4,6 @@ import axios from "axios";
 import { ArrowRight, Bike, User2, UserRoundCog } from "lucide-react";
 import { motion } from "motion/react";
 import { useSession } from "next-auth/react";
-import { redirect } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -12,7 +11,7 @@ const EditRoleMobile = () => {
   const [roles , setRoles] = useState([
     {id:"admin", label:"Admin", icon:UserRoundCog},
     {id:"user", label:"User", icon:User2},
-    {id:"diliveryBoy", label:"Delivery Boy", icon:Bike},
+    {id:"deliveryBoy", label:"Delivery Boy", icon:Bike},
   ])
   const [selectedRole, setSelectedRoles] = useState("");
   const [mobile, setMobile] = useState("");

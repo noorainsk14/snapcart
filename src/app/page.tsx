@@ -1,5 +1,6 @@
 import { auth } from '@/auth';
 import EditRoleMobile from '@/components/EditRoleMobile';
+import Nav from '@/components/Nav';
 import connectDb from '@/lib/db'
 import User from '@/models/user.model';
 import { redirect } from 'next/navigation';
@@ -10,7 +11,8 @@ const Home = async() => {
   const session = await auth()
   console.log("session:",session);
   
-  const user = await User.findById(session?.user?.id)
+  const user = await User.findById(session?.user?.id).select("-password")
+  console.log("user:", user)
   if(!user){
     redirect("/login")
   }
@@ -21,8 +23,14 @@ const Home = async() => {
     return <EditRoleMobile/>
   }
 
+  const plainUser = JSON.parse(JSON.stringify(user))
+  
+  
+
   return (
-    <div>Home</div>
+    <>
+      <Nav user={plainUser}/>
+    </>
   )
 }
 

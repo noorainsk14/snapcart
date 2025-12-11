@@ -72,24 +72,42 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       return true
     },
 
-    jwt({token, user}){
-      if(user){
-        token.id = user.id,
-        token.name = user.name,
-        token.email = user.email,
-        token.role = user.role
-      }
-      return token
-    },
-    session({session, token}){
-      if(session.user){
-        session.user.id = token.id as string,
-        session.user.name = token.name as string,
-        session.user.email = token.email as string,
-        session.user.role = token.role as string
-      }
-      return session
-    }
+    jwt: async ({ token, user }) => {
+  // Initial login
+  if (user) {
+    token.id = user.id;
+    token.name = user.name;
+    token.email = user.email;
+    token.role = user.role;
+  }
+
+  // 🔥 Always fetch fresh user from DB on each JWT call
+  const dbUser = await User.findById(token.id);
+
+  if (dbUser) {
+    token.role = dbUser.role;
+    token.mobile = dbUser.mobile;
+    token.name = dbUser.name;
+     token.createdAt = dbUser.createdAt;
+    token.updatedAt = dbUser.updatedAt;
+  }
+
+  return token;
+},
+
+session: async ({ session, token }) => {
+  if (session.user) {
+    session.user.id = token.id as string;
+    session.user.name = token.name;
+    session.user.email = token.email as string;
+    session.user.role = token.role as string;
+    session.user.mobile = token.mobile as string;
+    session.user.createdAt = token.createdAt;
+    session.user.updatedAt = token.updatedAt;
+  }
+  return session;
+},
+
   },
   pages:{
     signIn:"/login",
