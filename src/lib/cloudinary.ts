@@ -23,7 +23,7 @@ const uploadOnCLoudinary = async (file:Blob):Promise<string | null> => {
                     if(error){
                         reject(error)
                     }else{
-                        result?.secure_url ?? null
+                        resolve(result?.secure_url ?? null)
                     }
                 }
             )

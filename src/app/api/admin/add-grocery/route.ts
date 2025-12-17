@@ -5,7 +5,6 @@ import { asyncHandler } from "@/lib/asyncHandler";
 import uploadOnCLoudinary from "@/lib/cloudinary";
 import connectDb from "@/lib/db";
 import Grocery from "@/models/grocery.model";
-import { image } from "motion/react-client";
 
 
 export const POST = asyncHandler(async(req:Request) => {
